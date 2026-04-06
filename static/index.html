@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>gourl.space</title>
+    <style>
+        /* Базовые цвета: 
+           Фон: #090e17 (глубокий сине-черный)
+           Карточки: #111827 (темно-синий/серый)
+           Акценты: #3b82f6 (ярко-синий), #0ea5e9 (голубой)
+        */
+        body { font-family: 'Roboto', 'Open Sans', sans-serif; display: flex; justify-content: center; align-items: center; min-height: 100vh; background-color: #090e17; color: #e2e8f0; margin: 0; padding: 20px; box-sizing: border-box; }
+        .container { text-align: center; width: 100%; max-width: 600px; display: flex; flex-direction: column; align-items: center; }
+        
+        /* Avatar */
+        .avatar { width: 80px; height: 80px; border-radius: 50%; background-color: #111827; display: flex; justify-content: center; align-items: center; margin-bottom: 20px; overflow: hidden; border: 2px solid #3b82f6; box-shadow: 0 0 15px rgba(59, 130, 246, 0.3); }
+        .avatar img { width: 100%; height: 100%; object-fit: cover; }
+        
+        /* Title and Subtitle */
+        h1 { font-size: 2.5rem; color: #ffffff; margin: 0 0 10px 0; text-transform: uppercase; letter-spacing: 1px; }
+        .subtitle { font-size: 1.1rem; color: #94a3b8; max-width: 450px; line-height: 1.5; margin-bottom: 40px; }
+        
+        /* Info Cards */
+        .info-cards { display: flex; gap: 20px; width: 100%; margin-bottom: 30px; }
+        .card { background-color: #111827; border: 1px solid #1e293b; border-radius: 12px; padding: 20px; flex: 1; text-align: left; display: flex; flex-direction: column; align-items: flex-start; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.5); }
+        .card-icon-container { width: 40px; height: 40px; border-radius: 50%; display: flex; justify-content: center; align-items: center; margin-bottom: 15px; }
+        .card-icon { width: 20px; height: 20px; fill: currentColor; }
+        .card-title { font-size: 1.2rem; font-weight: 500; color: #f8fafc; margin: 0 0 10px 0; }
+        .card-text { font-size: 0.9rem; color: #94a3b8; line-height: 1.4; margin: 0; }
+        
+        /* Input Form */
+        .form-card { background-color: #111827; border: 1px solid #1e293b; border-radius: 12px; width: 100%; padding: 20px; margin-bottom: 20px; box-sizing: border-box; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.5); }
+        input[type="url"] { width: 100%; padding: 15px; background-color: #030712; border: 1px solid #334155; border-radius: 8px; color: #f8fafc; font-size: 16px; box-sizing: border-box; margin-bottom: 15px; transition: all 0.2s; }
+        input[type="url"]:focus { outline: none; border-color: #3b82f6; box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.2); }
+        input[type="url"]::placeholder { color: #475569; }
+        
+        /* Buttons */
+        .btn { width: 100%; padding: 15px; border-radius: 8px; cursor: pointer; font-size: 16px; transition: background-color 0.2s, transform 0.1s; display: flex; justify-content: center; align-items: center; gap: 10px; text-decoration: none; box-sizing: border-box; border: none; font-weight: 600; }
+        .btn:active { transform: scale(0.98); }
+        .btn-primary { background-color: #2563eb; color: white; box-shadow: 0 4px 14px 0 rgba(37, 99, 235, 0.39); }
+        .btn-primary:hover { background-color: #1d4ed8; }
+        .btn-icon { width: 20px; height: 20px; fill: currentColor; flex-shrink: 0; }
+        
+        /* Result */
+        #result { margin-top: 10px; width: 100%; padding: 20px; background-color: #111827; border: 1px solid #1e293b; border-radius: 12px; display: none; text-align: left; box-sizing: border-box; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.5); }
+        #result.active { display: block; }
+        .result-title { color: #f8fafc; margin: 0 0 10px 0; font-size: 1.2rem; }
+        .result-link { word-break: break-all; color: #38bdf8; text-decoration: none; font-weight: 500; }
+        .result-link:hover { text-decoration: underline; color: #7dd3fc; }
+        .error { color: #ef4444; }
+        
+        /* Footer */
+        footer { margin-top: 40px; font-size: 0.85rem; color: #64748b; line-height: 1.6; }
+        footer a { color: #38bdf8; text-decoration: none; font-weight: 500; }
+        footer a:hover { text-decoration: underline; color: #7dd3fc; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="avatar">
+            <svg viewBox="0 0 100 100" style="fill: #60a5fa; width: 60%; height: 60%;">
+                <path d="M 50,10 L 90,50 L 50,90 L 10,50 Z M 50,20 L 20,50 L 50,80 L 80,50 Z"></path>
+                <circle cx="50" cy="50" r="5"></circle>
+            </svg>
+        </div>
+        
+        <h1>gourl.space</h1>
+        <div class="subtitle">Your tool for quick and easy link shortening. Share them with ease.</div>
+        
+        <div class="info-cards">
+            <div class="card">
+                <div class="card-icon-container" style="background-color: rgba(59, 130, 246, 0.15); color: #60a5fa;">
+                    <svg class="card-icon" viewBox="0 0 24 24"><path d="M13.2,13.2 L20,3 H12 V9 M10.8,10.8 L4,21 H12 V15"></path></svg>
+                </div>
+                <h3 class="card-title">Instant</h3>
+                <p class="card-text">Your link is created in seconds.</p>
+            </div>
+            <div class="card">
+                <div class="card-icon-container" style="background-color: rgba(14, 165, 233, 0.15); color: #38bdf8;">
+                    <svg class="card-icon" viewBox="0 0 24 24"><path d="M12,1 L3,5 V11 C3,16.55 6.84,21.74 12,23 C17.16,21.74 21,16.55 21,11 V5 L12,1 Z M12,3 L19,6.11 V11 C19,15.18 16.03,19.33 12,21 C7.97,19.33 5,15.18 5,11 V6.11 L12,3 Z"></path></svg>
+                </div>
+                <h3 class="card-title">Reliable</h3>
+                <p class="card-text">Links always work and are secure.</p>
+            </div>
+        </div>
+        
+        <div class="form-card">
+            <form id="urlForm">
+                <input type="url" id="urlInput" placeholder="https://example.com" required>
+                <button type="submit" class="btn btn-primary">
+                    <svg class="btn-icon" viewBox="0 0 24 24"><path d="M13,22 H11 V12 H5 V10 H11 V0 H13 V10 H19 V12 H13 V22 Z"></path></svg>
+                    Shorten
+                </button>
+            </form>
+        </div>
+        
+        <div id="result">
+            <h3 class="result-title">Short link:</h3>
+            <div id="result-content"></div>
+        </div>
+        
+        <footer>
+            &copy; 2026 gourl.space. All rights reserved.<br>
+            <span style="display: inline-block; margin-top: 8px;">
+                Проект существует благодяря <a href="https://charmproject.org" target="_blank">charmproject.org</a>
+            </span>
+        </footer>
+    </div>
+
+    <script>
+        document.getElementById('urlForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const urlInput = document.getElementById('urlInput').value;
+            const resultDiv = document.getElementById('result');
+            const resultContent = document.getElementById('result-content');
+            
+            resultDiv.classList.remove('active');
+            resultContent.innerHTML = '<span style="color: #94a3b8;">Processing...</span>';
+            resultDiv.classList.add('active');
+
+            try {
+                const response = await fetch('/create', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ url: urlInput })
+                });
+
+                if (response.ok) {
+                    const data = await response.json();
+                    const shortUrl = window.location.origin + data.path;
+                    resultContent.innerHTML = `<a href="${shortUrl}" target="_blank" class="result-link">${shortUrl}</a>`;
+                } else if (response.status === 429) {
+                    resultContent.innerHTML = '<span class="error">Rate limit exceeded. Please wait.</span>';
+                } else {
+                    resultContent.innerHTML = '<span class="error">Error creating link.</span>';
+                }
+            } catch (error) {
+                resultContent.innerHTML = '<span class="error">Network error. Server unavailable.</span>';
+            }
+        });
+    </script>
+</body>
+</html>
